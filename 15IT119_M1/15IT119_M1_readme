@@ -1,0 +1,21 @@
+The following files and subdirectories are included in the directory RSA_attacks
+
+1. attacks/
+   - com_mod_3.py : Common modulus attack 
+   - reiter.sage  : Franklin Reiter attack
+   - blind.sage   : Blind Signature attack
+   - Factorization
+     -- pollard_rho.py : Factorization using Pollard Rho technique
+
+2. testcases/
+   Testcases for all the above attacks are given in respective files
+
+3. Screenshots/
+   screenshots of the testcases
+
+The tool sage (mathematical wrapper on python) has been used for simple mathematical functions like generating a prime number, inverse modulus function and power exponentiation.
+
+Sage can be downloaded from - http://ftp.iitm.ac.in/sage/index.html
+Follow the installation guide to install the software - http://doc.sagemath.org/html/en/installation/binary.html#sec-installation-from-binaries
+
+Some of the files have been implemented in python2.
