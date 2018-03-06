@@ -42,19 +42,19 @@ def CRT(ns, cs):
     return s % prod
 
 
-ns = [3,4,5]
+ns = [945849313*890855617,142594211*353521913,41692333*775305163]
 e = 3
 m1 = raw_input("Enter mesg1:")
-m2 = raw_input("Enter mesg2:")
-m3 = raw_input("Enter mesg3:")
+m2 = m1#raw_input("Enter mesg2:")
+m3 = m1#raw_input("Enter mesg3:")
 
 m1= int(m1.encode("hex"),16)
 m2= int(m2.encode("hex"),16)
 m3= int(m3.encode("hex"),16)
 
-print m1
-print m2
-print m3 
+print "The message is :",m1
+#print m2
+#print m3 
 
 cs = []
 cs.append(pow(m1,e,ns[0]))
@@ -65,8 +65,9 @@ cs.append(pow(m3,e,ns[2]))
 print cs[2]
 
 s = CRT(ns, cs)
+print s
 pt, perfect = gmpy.root(s, e)
-if perfect:
-    print "The message is %d or %s" % (pt, hex(pt)) 
-else:
-    print "Cannot find %dth root of %d" % (e, s)
+m = hex(pt)
+b=m[2:].decode("hex")
+print "The message is %d or %s" % (pt, hex(pt)) 
+print "Text : %s" % b
