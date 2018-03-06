@@ -1,50 +1,59 @@
 import gmpy
 
-def eGCD(a, b):
-    
-    #extended euclidean algorithm. g,x,y such that ax+by=g=gcd(a,b)
-    
-    u, u1 = 1, 0
-    v, v1 = 0, 1
-    g, g1 = a, b
-    while g1:
-            q = g // g1
-            u, u1 = u1, u - q * u1
-            v, v1 = v1, v - q * v1
-            g, g1 = g1, g - q * g1
-    return u, v
 
-def modInv(a, m):
-    
-    #r for a*r mod m = 1
-    
-    return gmpy.invert(a, m)
+
+def mul_inv(t,n):
+    #t*r mod n = 1
+    return gmpy.invert(t,n)
+
+
+
+def ext_euc_alg(a,b):
+    x,x1 = 1,0
+    y,y1 = 0,1
+    g,g1 = a,b
+    while g1:
+        q=g//g1
+        x=x1
+        x1=x- q*x1
+        y=y1 
+        y1=y- q*y1
+        g=g1
+        g1=g- q*g1
+    return x,y
+
+
 
 def CRT(ns, cs):
-   
-    #Chinese Remainder Theorem
-    #ns is the array of moduli
-    #cs is the array of C
-    #s for s mod ns[i] = cs[i]
-    
-    length = len(ns)
-    if not length == len(cs):
-        print "The lengths of the two must be the same"
+    #ns : array of Ns
+    #cs : array of C
+    l = len(ns)
+    if not l == len(cs):
+        print "Equal number of elements should be there in the arrays"
         return None
 
-    p = i = prod = 1 
-    s = 0
-    for i in range(length): 
-        prod *= ns[i]
-    for i in range(length):
-        p = prod // ns[i]
-        s += cs[i] * modInv(p, ns[i]) * p
-    return s % prod
+    v = 1
+    i = 1
+    product = 1 
+    #sol : sol mod ns[i] = cs[i]. This is the solution of the CRT
+    sol = 0
+    for i in range(l): 
+        product = product*ns[i]
+    
+    for i in range(l):
+        v=product // ns[i]
+        sol=sol + (cs[i] * mul_inv(v, ns[i]) * v)
 
+    result=sol%product
+    
+    return result
+
+
+#main driver part
 
 ns = [945849313*890855617,142594211*353521913,41692333*775305163]
 e = 3
-m1 = raw_input("Enter mesg1:")
+m1 = raw_input("Enter message to be broadcasted:")
 m2 = m1#raw_input("Enter mesg2:")
 m3 = m1#raw_input("Enter mesg3:")
 

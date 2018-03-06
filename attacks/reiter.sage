@@ -9,10 +9,10 @@ def gcd_of_pol(g,h):
 def reiter(ciphertxt, N, r, e):
 
     P.<x> = PolynomialRing(Zmod(N))
-	c1, c2 = ciphertxt
+	c1,c2 = ciphertxt
 
-    g = x ^ e - c1
-    h = (2*x + r) ^ e - c2
+    g= x^e - c1
+    h= (2*x+r)^e - c2
 
     result = gcd_of_pol(g,h).coefficients()[0]
     result1 = -result
