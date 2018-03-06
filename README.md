@@ -10,5 +10,5 @@ For installation refer to : http://doc.sagemath.org/html/en/installation/quick-g
 Crucial steps involved in installation : 
   - Mirrors (for binaries) : http://www.sagemath.org/mirrors.html
   - After you have unzipped the binary, (for Linux Systems) you can update the `SAGE_ROOT` variable inside the file `sage` in the `SageMath` directory. Update the SageRoot to : `#SAGE_ROOT=/path/to/sage-version`
-  - Next copy this sage file to `/usr/local/bin/`
+  - Next, copy this sage file to `/usr/local/bin/`
 2. gmpy
