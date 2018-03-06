@@ -6,7 +6,7 @@ def gcd(a,b):
         return b
     return gcd(b%a,a)
 
-def pollard_rho(number,x,y):
+def rho(number,x,y):
     d = 1
     while d is 1:
         x = (x**2+1)%number
@@ -19,27 +19,20 @@ def pollard_rho(number,x,y):
         d = gcd(z,number)
     return d
 
-def attack(input={}):
+def factorize(n):
     #initialising x and y values
     x=2
     y=2
-    errors=[]
-    try:
-        number = input['n']
-    except TypeError as e:
-        errors.append(e)
-    factor1 = pollard_rho(number,x,y)
+
+    factor1 = rho(n,x,y)
     while factor1 is  1:
         x = x+1
         y = y+1
-        factor1 = pollard_rho(number,x,y)
-    factor2 = int(number/factor1)
-    res ={'p':factor1,'q':factor2}
-    return {'errors':errors,'results':res}
+        factor1 = rho(n,x,y)
+    factor2 = int(n/factor1)
+    return factor2,factor1
 
 n = input("Enter the number n :")
-#a=attack({'n':570541})
 
-a=attack({'n':n})
-
-print a['results']
+p,q = factorize(n)
+print "The Two Factors are : %i and %i" % (p,q)
