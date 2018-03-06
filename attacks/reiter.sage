@@ -23,7 +23,7 @@ def reiter(ciphertxt, N, r, e):
 # modulus N is a product of two large prime numbers p and q
 p = random_prime(2^50)
 q = random_prime(2^50)
-N = p * q
+N = p*q
     
 m1=raw_input("Enter message to be transmitted:")
 
@@ -35,7 +35,7 @@ print "Message-1 = %d" %m1
 
 r = random.randint(0,N)
 
-m2 = 2*m1 + r #making a related message
+m2 = 2*m1+r #making a related message
 print "Message-2 = %d" %m2
         
 ciphertxt = [pow(m1,e,N),pow(m2,e,N)]
