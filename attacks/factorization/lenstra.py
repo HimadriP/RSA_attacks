@@ -1,95 +1,98 @@
-from random import randint
 from fractions import gcd
 
+from random import randint
 
-# Sieve of Eratosthenes
-def primes(n):
-    b = [True] * (n + 1)
-    ps = []
+# Prime number generator ( Sieve )
+def sieve(n):
+    filter = [True] * (n + 1)
+    primes = []
     for p in xrange(2, n + 1):
-        if b[p]:
-            ps.append(p)
+        if filter[p]:
+            primes.append(p)
             for i in xrange(p, n + 1, p):
-                b[i] = False
-    return ps
+                filter[i] = False
+    return primes
 
-
-# Finds modular inverse
-# Returns inverse, unused helper and gcd
-def modular_inv(a, b):
+# Modular multiplicative inverse
+def inverse_mult(a, b):
     if b == 0:
         return 1, 0, a
     q, r = divmod(a, b)
-    x, y, g = modular_inv(b, r)
+    x, y, g = inverse_mult(b, r)
     return y, x - q * y, g
 
-
-# Addition in Elliptic curve modulo m space
-def elliptic_add(p, q, a, b, m):
-    # If one point is infinity, return other one
-    if p[2] == 0: return q
-    if q[2] == 0: return p
+# Elliptic curve addition in modulo m space
+def eladd(p, q, a, b, m):
+    # if p or q = infinity, r = q or p
+    if p[2] == 0:
+        return q
+    if q[2] == 0:
+        return p
     if p[0] == q[0]:
+        #if point of infinity
         if (p[1] + q[1]) % m == 0:
-            return 0, 1, 0  # Infinity
-        num = (3 * p[0] * p[0] + a) % m
-        denom = (2 * p[1]) % m
+            return 0, 1, 0
+
+        #numerator and denominator for the slope of the line
+        numerator = (3 * p[0] * p[0] + a) % m
+        denominator = (2 * p[1]) % m
     else:
-        num = (q[1] - p[1]) % m
-        denom = (q[0] - p[0]) % m
-    inv, _, g = modular_inv(denom, m)
-    # Unable to find inverse, arithmetic breaks
+        numerator = (q[1] - p[1]) % m
+        denominator = (q[0] - p[0]) % m
+    inv, _, g = inverse_mult(denominator, m)
+    # elliptic arithmetic breaks if inverse does not exist
     if g > 1:
-        return 0, 0, denom  # Failure
-    z = (num * inv * num * inv - p[0] - q[0]) % m
-    return z, (num * inv * (p[0] - z) - p[1]) % m, 1
+        return 0, 0, denominator
+
+    #Calculating the value of x and y at R
+    z = (numerato * inv * numerator * inv - p[0] - q[0]) % m
+    return z, (numerator * inv * (p[0] - z) - p[1]) % m, 1
 
 
-# Multiplication (repeated addition and doubling)
-def elliptic_mul(k, p, a, b, m):
-    r = (0, 1, 0)  # Infinity
+# Elliptic multiplication using doubling(repeated addtion -> p + p) [ on mod m ]
+def elmult(k, p, A, B, m):
+    #Infinity Point
+    r = (0, 1, 0)
     while k > 0:
-        # p is failure, return it
+        # If point P is failing return answer
         if p[2] > 1:
             return p
         if k % 2 == 1:
-            r = elliptic_add(p, r, a, b, m)
+            r = eladd(p, r, A, B, m)
         k = k // 2
-        p = elliptic_add(p, p, a, b, m)
+        p = eladd(p, p, A, B, m)
     return r
 
-
 # Lenstra's algorithm for factoring
-# Limit specifies the amount of work permitted
-def lenstra(n, limit):
-    g = n
-    while g == n:
-        # Randomized x and y
-        q = randint(0, n - 1), randint(0, n - 1), 1
-        # Randomized curve coefficient a, computed b
-        a = randint(0, n - 1)
-        b = (q[1] * q[1] - q[0] * q[0] * q[0] - a * q[0]) % n
-        g = gcd(4 * a * a * a + 27 * b * b, n)  # singularity check
-    # If we got lucky, return lucky factor
-    if g > 1:
-        return g
-    # increase k step by step until lcm(1, ..., limit)
-    for p in primes(limit):
-        pp = p
-        while pp < limit:
-            q = elliptic_mul(p, q, a, b, n)
-            # Elliptic arithmetic breaks
+def lenstra(n, limit=1000):
+    d = n
+    while d == n:
+        # Randomly selecting the points x and y
+        xq = randint(0, n - 1)
+        yq = randint(0, n - 1)
+        q = xq,yq,1
+        # Randomly selecting curve coeff 
+        A = randint(0, n - 1)
+        B = (q[1] * q[1] - q[0] * q[0] * q[0] - A * q[0]) % n
+        # singularity check
+        d = gcd(4 * A * A * A + 27 * B * B, n)  
+
+    if d > 1:
+        return d
+    # Incrementing the numeber K till lcm(1, ..., limit)
+    for p in sieve(limit):
+        k = p
+        while k < limit:
+            q = elmult(p, q, A, B, n)
+            # Elliptic arithmetic breaks, The
             if q[2] > 1:
-                return gcd(q[2], n)
-            pp = p * pp
-    return False
+                factor1 = gcd(q[2],n)
+                factor2 = n/factor1
+                return "Factors are : %i and %i" % (factor1,factor2)
+            k = p * k
+            
+    return "The number itself is a prime number"
 
+n = input("Enter the number n:")   
+print lenstra(n)
 
-# Command line tool
-def main():
-    n = input("Enter the number n:")   
-    print lenstra(n, limit=1000)
-
-
-if __name__ == '__main__':
-    main()

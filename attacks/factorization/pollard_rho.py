@@ -1,22 +1,27 @@
 import random
 import math
 
+#Basic GCD code
 def gcd(a,b):
     if a<=0:
         return b
     return gcd(b%a,a)
 
-def rho(number,x,y):
+def rho(number,p,q):
     d = 1
     while d is 1:
-        x = (x**2+1)%number
+        
+        #Function choosen is f(a) = (a**2 + 1) mod m
+        p = (p**2+1)%number
         for i in range(0,2,1):
-            y = (y**2+1)%number
-        if x>y:
-            z = x-y
+            q = (q**2+1)%number
+            
+        if p>q:
+            diff = p-q
         else:
-            z=y-x
-        d = gcd(z,number)
+            diff=q-p
+        #Getting the factor
+        d = gcd(diff,number)
     return d
 
 def factorize(n):
@@ -25,10 +30,6 @@ def factorize(n):
     y=2
 
     factor1 = rho(n,x,y)
-    while factor1 is  1:
-        x = x+1
-        y = y+1
-        factor1 = rho(n,x,y)
     factor2 = int(n/factor1)
     return factor2,factor1
 
