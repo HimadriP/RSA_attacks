@@ -1,6 +1,5 @@
 
 import math
-import time
 
 def RP(x,y,z):
     s = 1;
@@ -48,26 +47,31 @@ def computeM (p):
 def factors(F): 
     X = [];    
     while(F != []):
-        X.append( (F[0], F.count(F[0])) );
-        F = F[F.count(F[0]):len(F)];
+        X.append((F[0],F.count(F[0])));
+        F=F[F.count(F[0]):len(F)];
     return X;
 
-def silverPohligHellman(P, g, b, n):
+def silverPohligHellman(P, a, b, n):
     A = [];
     u = 0;
-    (gInv, _) = egcd(g, n);
-    gInv = gInv % n;
+    (aInv, _) = egcd(a, n);
+    aInv = aInv % n;
     c = n-1;
     r = b; 
     for i in range(0, len(P)): 
-        x = RP((c/(P[i][0])), g, n);
+        x = RP((c/(P[i][0])), a, n);#from sage.all import *
+        
         for j in range(0, (P[i][1])):                                  
-            y = RP((c/((P[i][0])**(j+1))), b, n);
+            
+            y=RP((c/((P[i][0])**(j+1))), b, n);
+            
             for k in range(0, (P[i][0])): 
+                
                 if pow(x, k, n) == y:
                     u += k*(P[i][0]**j);
                     break;           
-            b = (b * RP((P[i][0]**j)*k, gInv, n)) % n;
+            
+            b=(b*RP((P[i][0]**j)*k,aInv,n)) % n;
         A.append(u);
         u = 0;
         b = r;                 
@@ -92,16 +96,16 @@ def factor(x, primeFactors, i):
     if x == 1:
         return;
     else:
-        while j < math.ceil(x/2): 
-            if(x % j) == 0:  
+        while j<math.ceil(x/2): 
+            if(x%j)==0:  
                 if isPrime(j): 
                     primeFactors.append(j);
                     if isPrime(x/j): 
                         primeFactors.append(x/j);
                         return;
                     else:
-                        i += 1;
-                        factor((x/primeFactors[(i-1)]), primeFactors, i);  
+                        i+=1;
+                        factor((x/primeFactors[(i-1)]),primeFactors,i);  
                         return;
             j += 1;
     return
@@ -113,12 +117,14 @@ print "Enter a: ";
 a = int(raw_input());
 print "Enter b: ";
 b = int(raw_input());    
-print "Enter n(n should have small prime factors):";
+print "Enter n(n-1 should have small prime factors):";
 n = int(raw_input()); 
 factor(n-1, F, 0); 
-F = factors(F);
+F = factors(F); #power of the prime factors
 Z = silverPohligHellman(F, a, b, n);
 x = compute(Z, F);
+if x<0:
+    x=x+n-1
 print "x = " + str(x);
     
 

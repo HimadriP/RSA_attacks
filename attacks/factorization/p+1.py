@@ -59,6 +59,7 @@ def williams_pp1(n):
             for _ in xrange(e):
                 v = lucas_seq_modm(v, p, n)
 
+            print("The value of v generated from lucas sequence is : ",v)
             factor = gcd(v - 2, n)
 
             # If g is a factor
