@@ -59,7 +59,7 @@ def silverPohligHellman(P, a, b, n):
     c = n-1;
     r = b; 
     for i in range(0, len(P)): 
-        x = RP((c/(P[i][0])), a, n);#from sage.all import *
+        x = RP((c/(P[i][0])), a, n);
         
         for j in range(0, (P[i][1])):                                  
             
@@ -120,6 +120,7 @@ b = int(raw_input());
 print "Enter n(n-1 should have small prime factors):";
 n = int(raw_input()); 
 factor(n-1, F, 0); 
+<<<<<<< HEAD
 F = factors(F); #power of the prime factors
 Z = silverPohligHellman(F, a, b, n);
 x = compute(Z, F);
