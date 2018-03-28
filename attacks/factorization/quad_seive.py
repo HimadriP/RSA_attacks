@@ -1,4 +1,4 @@
-from tonelli_shanks1 import legendre_symbol,tonelli_shanks
+from tonelli_shanks import legendre_symbol,tonelli_shanks
 from math import sqrt,exp,log,e
 from itertools import chain
 
