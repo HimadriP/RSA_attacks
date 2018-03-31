@@ -3,6 +3,8 @@ This project implements the various attacks mentioned in this [paper](https://cr
 
 This project also has implementation of prime factorization techniques listed in this [paper](https://www.sciencedirect.com/science/article/pii/S0898122111001131)
 
+Various other attacks have also been included.
+
 ## Exploits ( Novel Attacks )
 1. Blind  Signature
 2. Common Modulus
